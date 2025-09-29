@@ -49,8 +49,8 @@ Fine-tuned PLMs achieve **74-130% relative BLEU-4 improvements** over baseline t
 
 ### Quick Setup
 ```bash
-git clone https://github.com//imics-lab/gloss2text.git
-cd gloss2text
+git clone https://github.com//imics-lab/bidirectional-gloss-translation.git
+cd bidirectional-gloss-translation
 
 # Create virtual environment
 python -m venv venv
