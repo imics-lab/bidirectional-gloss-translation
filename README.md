@@ -1,148 +1,151 @@
-> `### <<< DELETE ME:` ***Template***
->  
-> This template contains some useful structure and convention for new research
-> projects that will help you get started more quickly, and will make your
-> code more accessible, maintainable, and reproducible. This will make your
-> work more likely to be adopted by others!
->
-> I highly recommend taking a second to read Patrick Mineault's
-> [Good Research Code Handbook](https://goodresearch.dev/index.html) if you are
-> in the process of starting a new project for many tips that will help you
-> beyond the initial setup phase.
->
-> > *Note:* You should delete everything within markdown blockquotes `>` before
-> going live with your project.
-> 
-> `### DELETE ME >>>`
+## Bidirectional Sign Language Translation with Pre-trained Language Models
+
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/release/python-380/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c?logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+This repository contains the implementation for **"Finetuning Pre-trained Language Models for Bidirectional Sign Language Gloss to Text Translation"** - a comprehensive study comparing fine-tuned pre-trained language models against transformer models trained from scratch for sign language gloss translation.
+
+## Overview
+
+Our research demonstrates that fine-tuning large pre-trained language models significantly outperforms training from scratch for bidirectional sign language gloss translation tasks. We evaluate multiple PLMs across three benchmark datasets with state-of-the-art results.
+
+### Supported Models
+
+| Model | Parameters | Architecture | Performance Highlights |
+|-------|------------|--------------|----------------------|
+| **T5-small** | 220M | Encoder-Decoder | Strong baseline performance |
+| **Flan-T5-small** | 220M | Encoder-Decoder | Instruction-tuned advantages |
+| **mBART-small** | 125M | Encoder-Decoder | Multilingual denoising benefits |
+| **LLaMA 3.1 8B** | 8B | Decoder-only | Best overall performance |
 
 
-<div align="center">
+## Results
 
+Fine-tuned PLMs achieve **74-130% relative BLEU-4 improvements** over baseline transformers. Results averaged over 10 runs:
 
-<!-- TITLE -->
-# Project Template `> REPLACE ME`
-A new project template for research projects. `> REPLACE ME`
+### Gloss-to-Text Performance (BLEU-4)
+| Dataset | Baseline | T5 | Flan-T5 | mBART | **LLaMA 8B** |
+|---------|----------|----|---------| ------|-------------|
+| PHOENIX-14T | 13.06 | 22.73 | 19.03 | 25.58 | **29.92** |
+| SIGNUM | 34.24 | 52.87 | 50.72 | **67.60** | 65.78 |
+| ASLG-PC12 | 62.81 | 68.69 | 65.40 | 79.58 | **83.10** |
 
-<!-- BADGES -->
-> <div align="left">
-> 
-> `### <<< DELETE ME` ***Badges*** *(optional)*
->  
-> If you have an arXiv paper, you can add and update the `[arXiv]` badge by
-> replacing `1234.56789` with the arXiv ID of your paper and the arXiv
-> subject `cs.LG` with the main subject. Else, delete it (or comment out).
->
-> if your paper is published at a conference, you can add and update the
-> `[Conference]` badge by replacing `Conference`, `Year`, and the link fields.
-> Else, delete it (or comment out).
-> 
-> It is also useful to add a CI build/test [status badge](https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/adding-a-workflow-status-badge)
-> to your project. A base Continuous Integration pipeline has been defined in
-> [.github/workflows/conda-test.yml](.github/workflows/conda-test.yml)
-> GitHub will automatically register and run this pipeline when you push to the
-> `main` branch.
-> 
-> Copy the workflow badge from the corresponding workflow in the Actions tab
-> (click the breadcrumbs) and overwrite the Conda Test badge below.
-> 
-> 
-> `### DELETE ME >>>`
->
-> </div>
+### Text-to-Gloss Performance (BLEU-4)
+| Dataset | Baseline | T5 | Flan-T5 | mBART | **LLaMA 8B** |
+|---------|----------|----|---------| ------|-------------|
+| PHOENIX-14T | 6.98 | 8.49 | 10.00 | 12.10 | **16.81** |
+| SIGNUM | 10.30 | **34.66** | 32.44 | 25.43 | 29.74 |
+| ASLG-PC12 | 14.50 | 21.73 | 18.51 | 27.68 | **55.21** |
 
-[![Conda Test](https://github.com/ellisbrown/research-project/actions/workflows/conda-test.yml/badge.svg)](https://github.com/ellisbrown/research-project/actions/workflows/conda-test.yml)
-[![arXiv](https://img.shields.io/badge/cs.LG-arXiv:1234.56789-b31b1b.svg)](https://arxiv.org/abs/1234.56789)
-[![Conference](https://img.shields.io/badge/Conference-year-4b44ce.svg)](https://yourconference.org/2020)
+**Key Findings:** LLaMA 8B excels on large datasets; mBART performs best on controlled vocabularies; T2G remains 30-60% more challenging than G2T.
 
-</div>
+## Installation
 
+### Requirements
+- Python 3.8+
+- CUDA-capable GPU (8GB+ VRAM recommended, 16GB+ for LLaMA)
+- 16GB+ system RAM (32GB+ recommended for LLaMA)
 
-<!-- DESCRIPTION -->
-## Description
-> `### <<< DELETE ME:` ***Description***
->  
-> Fill in a succinct description of your project.
-> 
-> `### DELETE ME >>>`
-
-
-<!-- SETUP -->
-## Setup
-
-> `### <<< DELETE ME:` ***Setup***
->  
-> Below are some base instructions for setting up a conda environment. See this
-> [guide](https://carpentries-incubator.github.io/introduction-to-conda-for-data-scientists/)
-> to Conda to learn some great best practices!
-> 
-> Add any instructions necessary to setup the project. The best time to create
-> this is ***as you are developing*** the project, while you remember the steps
-> you have taken.
->
-> *Brownie points*: try to follow your setup instructions to replicate the setup
-> from scratch on another machine to ensure that it is truly reproducible.
-> 
-> `### DELETE ME >>>`
-
-
-### Conda Virtual Environment
-
-Create the Conda virtual environment using the [environment file](environment.yml):
+### Quick Setup
 ```bash
-conda env create -f environment.yml
+git clone https://github.com//imics-lab/gloss2text.git
+cd gloss2text
 
-# dynamically set python path for the environment
-conda activate YOUR_PROJECT
-conda env config vars set PYTHONPATH=$(pwd):$(pwd)/src
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
 ```
 
-
-<!-- USAGE -->
 ## Usage
-> `### <<< DELETE ME:` ***Usage***
->  
-> Provide information on how to run your project. Delete the below example.
-> 
-> `### DELETE ME >>>`
 
-```python
-from foo import bar
-
-bar.baz("hello world")
-```
-
+### Quick Start
 ```bash
-python -m foo.bar "hello world"
+# Train T5-small on SIGNUM dataset for gloss-to-text
+python train.py --model t5-small --dataset signum --task g2t
+
+# Train LLaMA on PHOENIX for both directions
+python train.py --model llama-8b --dataset phoenix --task both
+
+# Train mBART on ASLG with custom settings
+python train.py --model mbart-small --dataset aslg --epochs 10 --batch_size 4
 ```
 
+### Programmatic Usage
+```python
+from src/pipeline import SignLanguageTranslationPipeline
 
-<!-- CONTRIBUTING -->
+# Initialize pipeline
+pipeline = SignLanguageTranslationPipeline(
+    model_name="t5-small",
+    dataset_type="signum"
+)
+
+# Load and preprocess data
+df = pipeline.load_dataset()
+df = pipeline.preprocess_data(df, sample_size=1000)
+
+# Prepare for training
+ds, val_df = pipeline.prepare_data_for_training(df, task="g2t")
+
+# Train model
+tokenizer, model = pipeline.load_model_and_tokenizer()
+tok_ds = pipeline.tokenize_data(ds)
+trainer = pipeline.train_model(tok_ds)
+
+# Generate translations
+text = "I need help with my homework"
+gloss = pipeline.generate_single_translation(text, task="t2g")
+print(f"Generated gloss: {gloss}")
+```
+
+### Available Options
+
+#### Models (`--model`)
+- `t5-small`: T5-small (220M params)
+- `flan-t5-small`: Flan-T5-small (220M params)  
+- `mbart-small`: mBART-small (125M params)
+- `llama-8b`: LLaMA 3.1 8B (8B params)
+
+#### Datasets (`--dataset`)
+- `signum`: SIGNUM dataset (DGS ↔ German)
+- `phoenix`: RWTH-PHOENIX-14T (DGS ↔ German)
+- `aslg`: ASLG-PC12 (ASL ↔ English)
+
+#### Tasks (`--task`)
+- `g2t`: Gloss-to-Text translation
+- `t2g`: Text-to-Gloss translation  
+- `both`: Train both directions sequentially
+
+
+## Model Performance
+
+### Hardware Requirements
+
+| Model | Min VRAM | Recommended VRAM | Training Time* |
+|-------|----------|------------------|----------------|
+| T5-small | 4GB | 8GB | ~2 hours |
+| Flan-T5-small | 4GB | 8GB | ~2 hours |
+| mBART-small | 6GB | 8GB | ~2.5 hours |
+| LLaMA 8B | 12GB | 16GB+ | ~8 hours |
+
+*Approximate times for 1000 samples, 5 epochs on RTX 4090*
+
+### Evaluation Metrics
+- **BLEU-1/2/3/4**: N-gram precision scores
+- **ROUGE-L**: Longest common subsequence
+- **METEOR**: Alignment-based semantic evaluation  
+- **WER**: Word Error Rate
+
 ## Contributing
+
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
 
+## License
 
-<!-- CITATION -->
-## Citation
-
-> `### <<< DELETE ME:` ***Citation***
->  
-> Adding a citation to your README will make it easier for others to cite your
-> work. Add your bibtext citation to the README below. GitHub also will
->  automatically detect [Citation File Format (`.cff`) files](https://citation-file-format.github.io/),
-> rendering a "Cite this repository" button. See [GitHub's tutorial](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-citation-files)
-> for more information. The example from this tutorial is included in 
-> [CITATION.cff](CITATION.cff), and should be modified or deleted.
-> 
-> `### DELETE ME >>>`
-
-
-```bibtex
-@article{YourName,
-  title={Your Title},
-  author={Your team},
-  year={Year}
-}
-```
-
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
